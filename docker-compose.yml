@@ -27,3 +27,5 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.my-app.rule=Host(`my-app.chrisregenboog.nl`)"
       - "traefik.http.routers.my-app.entrypoints=web"
+    networks:
+      - backend
