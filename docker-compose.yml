@@ -3,6 +3,9 @@ version: '3'
 networks:
   backend:
 
+volumes:
+  certificates:
+
 services:
   reverse-proxy:
     image: traefik:latest
@@ -11,11 +14,15 @@ services:
       - "--api.insecure=true"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=chrisregenboog@gmail.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/certificates/acme.json"
     ports:
-      - "80:80"
+      - "443:443"
       - "8080:8080"
     volumes:
+      - certificates:/certificates
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
       - backend
@@ -26,6 +33,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.my-app.rule=Host(`my-app.chrisregenboog.nl`)"
-      - "traefik.http.routers.my-app.entrypoints=web"
+      - "traefik.http.routers.my-app.entrypoints=websecure"
+      - "traefik.http.routers.my-app.tls.certresolver=myresolver"
     networks:
       - backend
