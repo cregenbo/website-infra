@@ -32,7 +32,7 @@ services:
     container_name: my-app
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.my-app.rule=Host(`my-app.chrisregenboog.nl`)"
+      - "traefik.http.routers.my-app.rule=Host(`www.chrisregenboog.nl`)"
       - "traefik.http.routers.my-app.entrypoints=websecure"
       - "traefik.http.routers.my-app.tls.certresolver=myresolver"
     networks:
