@@ -27,6 +27,16 @@ services:
     networks:
       - backend
 
+  keycloak:
+    image: jboss/keycloak:latest
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.my-app.rule=Host(`keycloak.chrisregenboog.nl`)"
+      - "traefik.http.routers.my-app.entrypoints=websecure"
+      - "traefik.http.routers.my-app.tls.certresolver=myresolver"
+    networks:
+      - backend
+
   my-app:
     image: cregenboog/my-app:latest
     container_name: my-app
