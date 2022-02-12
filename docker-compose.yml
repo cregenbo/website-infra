@@ -23,6 +23,7 @@ services:
       - "--certificatesresolvers.myresolver.acme.email=chrisregenboog@gmail.com"
       - "--certificatesresolvers.myresolver.acme.storage=/certificates/acme.json"
     ports:
+      - "80:80"
       - "443:443"
     volumes:
       - certificates:/certificates
