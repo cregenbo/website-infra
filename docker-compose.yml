@@ -36,9 +36,9 @@ services:
     image: jboss/keycloak:latest
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.my-app.rule=Host(`keycloak.chrisregenboog.nl`)"
-      - "traefik.http.routers.my-app.entrypoints=websecure"
-      - "traefik.http.routers.my-app.tls.certresolver=myresolver"
+      - "traefik.http.routers.keycloak.rule=Host(`keycloak.chrisregenboog.nl`)"
+      - "traefik.http.routers.keycloak.entrypoints=websecure"
+      - "traefik.http.routers.keycloak.tls.certresolver=myresolver"
     networks:
       - backend
     command: ["-b", "0.0.0.0"]
