@@ -41,6 +41,7 @@ services:
       - "traefik.http.routers.my-app.tls.certresolver=myresolver"
     networks:
       - backend
+    command: ["-b", "0.0.0.0"]
 
   my-app:
     image: cregenboog/my-app:latest
