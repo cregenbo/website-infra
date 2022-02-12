@@ -44,7 +44,6 @@ services:
       - CLIENT_SECRET=eygfhbAYlLDhTn5vNxcDyHWauaKHbgwV
     labels:
       - "traefik.enable=true"
-      - "traefik.docker.network=traefik_webgateway"
       - "traefik.http.services.forwardauth.loadbalancer.server.port=4181"
       - "traefik.http.routers.forwardauth.entrypoints=websecure"
       - "traefik.http.routers.forwardauth.rule=Path(`/_oauth`)"
