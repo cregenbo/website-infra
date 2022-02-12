@@ -7,7 +7,7 @@ volumes:
   certificates:
 
 services:
-  reverse-proxy:
+  traefik:
     image: traefik:latest
     command:
       #- "--log.level=DEBUG"
@@ -33,6 +33,26 @@ services:
     networks:
       - backend
 
+  forwardauth:
+    image: mesosphere/traefik-forward-auth:latest
+    networks:
+      - backend
+    environment:
+      - SECRET=super-duper-secret
+      - PROVIDER_URI=https://keycloak.chrisregenboog.nl/auth/realms/master
+      - CLIENT_ID=myapp
+      - CLIENT_SECRET=eygfhbAYlLDhTn5vNxcDyHWauaKHbgwV
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_webgateway"
+      - "traefik.http.services.forwardauth.loadbalancer.server.port=4181"
+      - "traefik.http.routers.forwardauth.entrypoints=websecure"
+      - "traefik.http.routers.forwardauth.rule=Path(`/_oauth`)"
+      - "traefik.http.routers.forwardauth.middlewares=traefik-forward-auth"
+      - "traefik.http.middlewares.traefik-forward-auth.forwardauth.address=http://forwardauth:4181"
+      - "traefik.http.middlewares.traefik-forward-auth.forwardauth.authResponseHeaders=X-Forwarded-User"
+      - "traefik.http.middlewares.traefik-forward-auth.forwardauth.trustForwardHeader=true"
+
   keycloak:
     image: jboss/keycloak:latest
     environment:
@@ -56,5 +76,6 @@ services:
       - "traefik.http.routers.my-app.rule=Host(`www.chrisregenboog.nl`)"
       - "traefik.http.routers.my-app.entrypoints=websecure"
       - "traefik.http.routers.my-app.tls.certresolver=myresolver"
+      - "traefik.http.routers.traefik-forward-auth.middlewares=traefik-forward-auth"
     networks:
       - backend
